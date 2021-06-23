@@ -7,31 +7,30 @@
   <style>
     .defaultDay
     {
-      font-family:arial;
+      font-family: arial;
       font-weight: lighter;
-      text-align:center;
-      vertical-align:middle;
+      text-align: center;
+      vertical-align: middle;
     }
     .validDay
     {
-      color:green;
-      background-color:white;
-    }
-    .emptyDay
-    {
-      color: grey;
-      background-color:grey;
+      color: green;
+      background-color: white;
     }
     .sunDay
     {
-      color:red;
-      background-color:white;
+      color: red;
+      background-color: white;
+    }
+    .table
+    {
+      width: 75%;
     }
   </style>
   </head>
   <body>
     <center>
-    <form method="post" action="index.php">
+    <form method="get" action="index.php">
       <select name="month" >
         <?php
           $yearArray = array( 1 => 'janvier',
@@ -53,7 +52,7 @@
           <option value='<?= $key; ?>' 
             <?php 
             // serveur: mois donné & correspond à celui qui va être affiché
-            if (isset($_POST['month']) && $_POST['month'] == $key)
+            if (isset($_GET['month']) && $_GET['month'] == $key)
             {
               echo 'selected';
             } 
@@ -67,14 +66,14 @@
           </select>
           <select name="year">
             <?php
-            for ($countYear = 1970; $countYear <= 2032; $countYear++)
+            for ($countYear = 1970; $countYear <= 2030; $countYear++)
             {
-            // partie serveur:
+            // partie serveur seule
             ?>
             <option 
               <?php 
               // serveur: année donnée & correspond à celle qui va être affiché
-              if (isset($_POST['year']) && $_POST['year'] == $countYear)
+              if (isset($_GET['year']) && $_GET['year'] == $countYear)
               {
                 echo 'selected';
               } 
@@ -90,13 +89,13 @@
         <input type="submit" name="submit" value="Afficher" class="btn btn-danger">
     </form>
     <?php
-      if (isset($_POST['submit']))
+      if (isset($_GET['submit']))
       {
         /*
-        * partie serveur: recupération des paramètres
+        * partie serveur seule: recupération des paramètres
         */
-        $month = $_POST['month'];
-        $year = $_POST['year'];
+        $month = $_GET['month'];
+        $year = $_GET['year'];
     ?>
       <!-- Affichage du calendrier
         table-striped: alternance automatique de la couleur de fond 'gris clair/blanc'
@@ -116,45 +115,48 @@
         </thead>
         <tbody>
           <?php
-            // affichage des jours du mois précédent dans la première semaine
-            $firstValidDay = date( "w", mktime (0,0,0,$month,1,$year));
-            for ($countDay = 1; $countDay < $firstValidDay; $countDay++) 
+            // affichage des jours du mois précédent dans la première semaine du mois demandé
+            $firstValidDay= date( "N", mktime (0,0,0,$month,1,$year));
+            for ($countDay= 1; $countDay < $firstValidDay; $countDay++) 
             {
-              echo "<td class=\"emptyDay table-active\"> </td>";
+              echo '<td class="table-active"></td>';
             }
             // affichage des jours du mois
             $numberDaysInMonth = date( "t", mktime(0,0,0,$month,1,$year));
-            for ($days = 1; $days <= $numberDaysInMonth+6; $days++) 
+            // On complete avec des jours 'vide' hors du mois courant dans la semaine courante
+            for ($days = 1; $days <= $numberDaysInMonth; $days++) 
             {
-              if ($days > $numberDaysInMonth) 
-              {
-                // On complete avec des jours 'vide' hors du mois courant
-                echo "<td class=\"table-active\"></td>";
+              // obtenir le numéro du jour, format ISO-8601 c.a.d. lundi=1 .. dimanche=7 
+              if (date( "N", mktime (0,0,0,$month,$days,$year)) == 7)
+              { 
+                // mettre les dimanches en rouge
+                echo '<td class="defaultDay sunDay">'.$days.'</td>';
+                // sinon une nouvelle semaine commence
+                if ($days == $numberDaysInMonth)
+                {
+                  // sauf si le mois se trermine un dimanche
+                  break;
+                }
+                {
+                  echo "<tr>"; 
+                }
               }
               else
               {
-                if (date( "N", mktime (0,0,0,$month,$days,$year)) == 7)
-                { 
-                  // mettre les dimanches en rouge
-                  {
-                    echo "<td class=\"defaultDay sunDay\">$days</td>";
-                    // attention si on est dimanche & dernier jour du mois
-                    if ($days == $numberDaysInMonth) break;
-                    // sinon une nouvelle semaine commence
-                    echo "<tr>"; 
-                  }
-                }
-                else
-                {
-                  // sinon mettre le jour de la semaine en vert
-                  echo "<td class=\"defaultDay validDay\">$days</td>";
-                }
+                // sinon mettre le jour de la semaine en vert
+                echo '<td class="defaultDay validDay">'.$days.'</td>';
               }
             }
-          }
+            for ($days= 1; $days < (6-$firstValidDay); $days++) 
+            {
+              echo '<td class="table-active"></td>';
+            }
           ?>
-          </tbody>
-        </table>
+        </tbody>
+      </table>
+      <?php
+      }
+      ?>
     </center>
   </body>
 </html>
