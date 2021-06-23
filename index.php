@@ -117,7 +117,7 @@
         <tbody>
           <?php
             // affichage des jours du mois précédent dans la première semaine
-            $firstValidDay = date( "w", mktime (0,0,0,$month,1,$year));
+            $firstValidDay = date( "N", mktime (0,0,0,$month,1,$year));
             for ($countDay = 1; $countDay < $firstValidDay; $countDay++) 
             {
               echo "<td class=\"emptyDay table-active\"> </td>";
