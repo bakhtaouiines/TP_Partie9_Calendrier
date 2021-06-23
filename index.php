@@ -1,3 +1,18 @@
+<?php
+  $calendarError = [] ; // Les erreurs en cas de non sélection
+
+  if(empty($_POST['month'])) { // Erreur pour le mois
+    $calendarErrorList['month'] = 'Veuillez choisir un mois' ;
+  }
+
+  if(empty($_POST['year'])) { // Erreur pour l'année
+    $calendarErrorList['year'] = 'Veuillez choisir une année' ;
+  }
+
+?>
+
+
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -65,6 +80,13 @@
               }
             ?>
           </select>
+            <?php // Affichage erreur si aucun mois sélectionné
+              if (empty($_POST['month'])) {
+            ?>
+              <p><span style="color:#FF0000"><?= $calendarError['month'] ?></span></p>
+            <?php
+              }
+            ?>
           <select name="year">
             <?php
             for ($countYear = 1970; $countYear <= 2032; $countYear++)
@@ -87,6 +109,13 @@
             }
             ?>
           </select>
+            <?php // Affichage erreur si aucune année sélectionnée
+              if (empty($_POST['year'])) {
+            ?>
+              <p><span style="color:#FF0000"><?= $calendarError['year'] ?></span></p>
+            <?php
+              }
+            ?>
         <input type="submit" name="submit" value="Afficher" class="btn btn-danger">
     </form>
     <?php
