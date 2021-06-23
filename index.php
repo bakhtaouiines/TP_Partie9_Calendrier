@@ -27,6 +27,9 @@
       color:black;
       background-color:white;
     }
+    .table {
+      width:600px
+    }
   </style>
   </head>
   <body>
