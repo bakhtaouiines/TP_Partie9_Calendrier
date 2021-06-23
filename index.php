@@ -20,8 +20,11 @@
 </head>
 
 <body>
-    <h1>TP - Partie 9 - CALENDRIER PHP</h1>
-    <p>Faire un formulaire avec deux listes déroulantes. La première sert à choisir le mois, et le deuxième permet d'avoir l'année.</p>
+    <div class="mx-4">
+        <h1 class="fw-lighter fs-3">TP - Partie 9 - CALENDRIER PHP</h1>
+        <p class="fst-italic">Faire un formulaire avec deux listes déroulantes. La première sert à choisir le mois, et le deuxième permet d'avoir l'année.</p>
+    </div>
+    <hr>
     <center>
         <form method="post" action="index.php">
             <select name="month">
@@ -115,7 +118,7 @@
                 // affichage des jours du mois précédent dans la première semaine
                 $firstValidDay = date("w", mktime(0, 0, 0, $month, 1, $year)); // w = Jour de la semaine au format numérique
                 for ($countDay = 1; $countDay < $firstValidDay; $countDay++) {
-                    echo "<td class=\"table-active\"></td>";
+                    echo "<td class=\"table-active\" ></td>";
                 }
                 // affichage des jours du mois
                 $numberDaysInMonth = date("t", mktime(0, 0, 0, $month, 1, $year)); // t = Nombre de jours dans le mois
