@@ -1,0 +1,16 @@
+.defaultDay {
+    color: #808080;
+    font-family: arial;
+    font-weight: lighter;
+    font-size: 0.9vw;
+    background-color: "#FFFFFF";
+}
+
+.validDay {
+    background-color: white;
+}
+
+.table {
+    font-size: 1.2vw;
+    width: 65%;
+}
