@@ -17,14 +17,6 @@
         .validDay {
             background-color: white;
         }
-
-        .emptyDay {
-            background-color: "#F2F2F2";
-        }
-
-        .sunday {
-            color: black;
-        }
     </style>
 </head>
 
@@ -84,7 +76,7 @@
         <!-- Affichage du calendrier -->
         <table>
             <th>
-                <table class="table table-borderless table-bordered bordered table-responsive" style="font-size:1.5vw; ">
+                <table class="table table-borderless table-bordered table-responsive" style="font-size:1.5vw; ">
                     <tbody class="defaultDay">
                         <!-- les jours du mois si l'utilisateur a envoyé une requête -->
                         <tr>
@@ -96,7 +88,7 @@
                             ?>
                                 <thead style="background-color : #808080; color: #D8D8D8;">
                                     <!-- header: noms des jours de la semaine -->
-                                    <div style="color: #959595; font-weight : lighter"><?= $yearArray[$month] . ' ' . $year ?></div>
+                                    <div style="color: #959595; font-weight : lighter" class="fs-4"><?= $yearArray[$month] . ' ' . $year ?></div>
                                     <div class="col">
                                         <th style="font-weight : lighter">Lundi</th>
                                     </div>
@@ -123,7 +115,7 @@
                                 // affichage des jours du mois précédent dans la première semaine
                                 $firstValidDay = date("w", mktime(0, 0, 0, $month, 1, $year)); // w = Jour de la semaine au format numérique
                                 for ($countDay = 1; $countDay < $firstValidDay; $countDay++) {
-                                    echo "<td class=\"defaultDay emptyDay\"></td>";
+                                    echo "<td class=\"table-active\"></td>";
                                 }
                                 // affichage des jours du mois
                                 $numberDaysInMonth = date("t", mktime(0, 0, 0, $month, 1, $year)); // t = Nombre de jours dans le mois
@@ -133,7 +125,7 @@
                                     if (date("N", mktime(0, 0, 0, $month, $days, $year)) == 7) { // N = Représentation numérique ISO-8601 du jour de la semaine
                                         if ($days > $numberDaysInMonth) $daysvalue = "";
                                         else  $daysvalue = $days;
-                                        echo "<td class=\"defaultDay sunday\">$daysvalue</td>";
+                                        echo "<td class=\"defaultDay\">$daysvalue</td>";
                                         // attention à la dernière semaine du mois... On arrête tout !
                                         if ($days >= $numberDaysInMonth) break;
                                         // et une nouvelle semaine commence
