@@ -5,12 +5,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
   <style>
-    .dayName
-    {
-      font-family: arial;
-      text-align: center;
-      vertical-align: middle;
-    }
     .defaultDay
     {
       font-family: arial;
@@ -111,13 +105,13 @@
         <thead>
           <!-- header: noms des jours de la semaine -->
           <div><strong><?= $yearArray[$month].' '.$year ?></strong></div>
-          <div><th class="dayName">Lundi</th></div>
-          <div><th class="dayName">Mardi</th></div>
-          <div><th class="dayName">Mercredi</th></div>
-          <div><th class="dayName">Jeudi</th></div>
-          <div><th class="dayName">Vendredi</th></div>
-          <div><th class="dayName">Samedi</th></div>
-          <div><th class="dayName">Dimanche</th></div>
+          <div><th>Lundi</th></div>
+          <div><th>Mardi</th></div>
+          <div><th>Mercredi</th></div>
+          <div><th>Jeudi</th></div>
+          <div><th>Vendredi</th></div>
+          <div><th>Samedi</th></div>
+          <div><th>Dimanche</th></div>
         </thead>
         <tbody>
           <?php
@@ -133,13 +127,16 @@
             for ($days = 1; $days <= $numberDaysInMonth; $days++) 
             {
               // obtenir le numéro du jour, format ISO-8601 c.a.d. lundi=1 .. dimanche=7 
-              $currentDayNumber= date( "N", mktime (0,0,0,$month,$days,$year));
-              if ($currentDayNumber == 7)
+              if (date( "N", mktime (0,0,0,$month,$days,$year)) == 7)
               { 
                 // mettre les dimanches en rouge
                 echo '<td class="defaultDay sunDay">'.$days.'</td>';
                 // sinon une nouvelle semaine commence
-                if ($days != $numberDaysInMonth)
+                if ($days == $numberDaysInMonth)
+                {
+                  // sauf si le mois se trermine un dimanche
+                  break;
+                }
                 {
                   echo "<tr>"; 
                 }
@@ -150,12 +147,9 @@
                 echo '<td class="defaultDay validDay">'.$days.'</td>';
               }
             }
-            // completer la semaine courant jusqu'à dimanche avec des jours 'vides'
-            while ($currentDayNumber != 7)
+            for ($days= 1; $days < (6-$firstValidDay); $days++) 
             {
-              $currentDayNumber= date( "N", mktime (0,0,0,$month,$days,$year));
               echo '<td class="table-active"></td>';
-              $days++;
             }
           ?>
         </tbody>
