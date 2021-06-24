@@ -1,4 +1,8 @@
 <?php
+define( 'dateFormatEng','Y/n/j');  
+define( 'dateFormatFr','j/n/Y');
+//$dateFormatEng='Y/n/j';
+//$dateFormatFr='j/n/Y';
 $monthList = array(
   1 => 'janvier',
   2 => 'février',
@@ -96,26 +100,26 @@ $yearList=[];
     $errorList=[];
     if (empty($_GET['month']))
     {
-      $errorList['mois']= 'absent';
+      $errorList['month']= 'absent';
     }
     else
     {
       $month = htmlspecialchars($_GET['month']);
       if (!array_key_exists($month, $monthList))
       {
-        $errorList['mois']= $month.' non prévu';
+        $errorList['month']= $month.' non prévu';
       }
     }
     if (empty($_GET['year']))
     {
-      $errorList['année']= 'absente';
+      $errorList['year']= 'absente';
     }
     else
     {
       $year = htmlspecialchars($_GET['year']);
       if (!in_array($year,$yearList))
       {
-        $errorList['année']= $year.' non prévue';
+        $errorList['year']= $year.' non prévue';
       }
     }
   if (!empty($errorList))
@@ -123,6 +127,15 @@ $yearList=[];
     var_dump($errorList);
     exit;
   }
+  // calcul de jours fériés dans l'année donnée
+  $publicHolliday=[];
+  array_push( $publicHolliday, '1/1/'.$year, '1/5/'.$year, '8/5/'.$year, '14/7/'.$year, '15/8/'.$year, '1/11/'.$year, '11/11/'.$year, '25/12/'.$year);
+  $dimancheDePaques= date( dateFormatEng, easter_date($year));
+  $lundiDePaques= date( dateFormatFr, strtotime($dimancheDePaques." +1 day"));
+  $jeudiDeAscension= date( dateFormatFr, strtotime($dimancheDePaques." +39 days"));
+  $lundiDePentecote= date( dateFormatFr, strtotime($dimancheDePaques." +50 days"));
+  array_push( $publicHolliday, $dimancheDePaques, $lundiDePaques, $jeudiDeAscension, $lundiDePentecote);
+  sort($publicHolliday);
   ?>
     <!-- Affichage du calendrier
         table-striped: alternance automatique de la couleur de fond 'gris clair/blanc'
@@ -165,13 +178,14 @@ $yearList=[];
         $numberDaysInMonth = date("t", mktime(0, 0, 0, $month, 1, $year));
         // On complete avec des jours 'vide' hors du mois courant dans la semaine courante
         for ($days = 1; $days <= $numberDaysInMonth; $days++) {
+          $ddMmYyyy= sprintf('%d/%d/%d', $days,$month,$year);
           // obtenir le numéro du jour, format ISO-8601 c.a.d. lundi=1 .. dimanche=7 
           $currentDayNumber = date("N", mktime(0, 0, 0, $month, $days, $year));
-          if ($currentDayNumber == 7) {
-            // mettre les dimanches en rouge
+          if (($currentDayNumber == 7) || (in_array($ddMmYyyy, $publicHolliday))){
+            // mettre les dimanches et les jours fériés en rouge
             echo '<td class="defaultDay sunDay">' . $days . '</td>';
             // sinon une nouvelle semaine commence
-            if ($days != $numberDaysInMonth) {
+            if (($days != $numberDaysInMonth) && ($currentDayNumber == 7)) {
               echo "<tr>";
             }
           } else {
