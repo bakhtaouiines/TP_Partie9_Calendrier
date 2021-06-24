@@ -1,0 +1,26 @@
+.dayName {
+      font-family: arial;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .defaultDay {
+      font-family: arial;
+      font-weight: lighter;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .validDay {
+      color: green;
+      background-color: white;
+    }
+
+    .sunDay {
+      color: red;
+      background-color: white;
+    }
+
+    .table {
+      width: 75%;
+    }
